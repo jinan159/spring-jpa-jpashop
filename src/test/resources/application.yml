@@ -1,11 +1,15 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/study/jpashop
+    url: jdbc:h2:mem:test
     username: sa
     password:
     driver-class-name: org.h2.Driver
 
   jpa:
+    hibernate:
+      # create : 모든 테이블을 drop-create 한다
+      # create-drop : 모든 테이블을 drop-create 하고, 테스트 후 drop 한다
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
