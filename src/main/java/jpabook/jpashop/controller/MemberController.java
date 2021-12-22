@@ -38,13 +38,10 @@ public class MemberController {
             return "members/createMemberForm";
         }
 
-        Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
+        Member newMember = form.toEntity();
 
-        Member member = new Member();
-        member.setName(form.getName());
-        member.setAddress(address);
+        memberService.join(newMember);
 
-        memberService.join(member);
         return "redirect:/";
     }
 
