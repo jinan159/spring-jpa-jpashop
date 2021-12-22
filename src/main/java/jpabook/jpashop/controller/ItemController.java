@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -59,6 +60,31 @@ public class ItemController {
         model.addAttribute("items", itemResponseList);
 
         return "items/itemList";
+    }
+
+    @GetMapping("items/{itemId}/edit")
+    public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
+        Book item = (Book) itemService.findOne(itemId);
+
+        BookForm bookForm = modelMapper.map(item, BookForm.class);
+
+        model.addAttribute("bookForm", bookForm);
+
+        return "items/updateItemForm";
+    }
+
+    @PostMapping("items/{itemId}/edit")
+    public String updateItem(@Valid @ModelAttribute("bookForm") BookForm bookForm, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "items/updateItemForm";
+        }
+
+        Book book = modelMapper.map(bookForm, Book.class);
+
+        itemService.saveItem(book);
+
+        return "redirect:/items";
     }
 
 }
